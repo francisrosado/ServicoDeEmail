@@ -9,12 +9,12 @@ namespace Aplicacao
 {
     public class EnviarEmail
     {
-        public string EnviarMensagemEmail(  string remetente, 
-                                            string senhaRemetente, 
-                                            string smtpRemetente, 
-                                            int portaRemetente, 
-                                            string destinario, 
-                                            string assunto, 
+        public Boolean EnviarMensagemEmail(string remetente,
+                                            string senhaRemetente,
+                                            string smtpRemetente,
+                                            int portaRemetente,
+                                            string destinario,
+                                            string assunto,
                                             string corpoDaMensagem,
                                             string enderecoDoArquivoAnexo,
                                             int idMensagem)
@@ -27,7 +27,7 @@ namespace Aplicacao
 
                 if (enderecoEmailValido == false)
                 {
-                    return "email invalido para";
+                    return false;
                 }
 
                 var mensagemEmail = new MailMessage
@@ -42,7 +42,7 @@ namespace Aplicacao
                 var anexado = new Attachment(enderecoDoArquivoAnexo, MediaTypeNames.Application.Octet);
                 mensagemEmail.Attachments.Add(anexado);
 
-                var clientSmtp = new SmtpClient(smtpRemetente, portaRemetente) {EnableSsl = false};
+                var clientSmtp = new SmtpClient(smtpRemetente, portaRemetente) { EnableSsl = false };
 
                 var cread = new NetworkCredential(remetente, senhaRemetente);
                 clientSmtp.Credentials = cread;
@@ -50,22 +50,12 @@ namespace Aplicacao
 
                 clientSmtp.Send(mensagemEmail);
 
-                return " Mensagem enviada de: " + remetente + " para: " + destinario;
+                return true;
 
             }
             catch (Exception)
             {
-                var log = new Log
-                {
-                    Data = DateTime.Now,
-                    Enviado = true,
-                    MensagemDeEnvio = "OK",
-                    Mensagem = { MensagemId = idMensagem }
-                };
-
-                logApp.Salvar(log);
-
-                return "Deu Merda!!";
+                return false;
             }
         }
 
@@ -80,7 +70,7 @@ namespace Aplicacao
             {
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }

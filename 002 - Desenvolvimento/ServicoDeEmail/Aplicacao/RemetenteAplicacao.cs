@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Data.Entity;
 using Dominio;
 using Repositorio;
 
@@ -19,7 +16,7 @@ namespace Aplicacao
 
         public void Salvar(Remetente remetente)
         {
-            Banco.Remetentes.Add(remetente);
+            if (remetente != null) Banco.Remetentes.Add(remetente);
             Banco.SaveChanges();
         }
 
@@ -28,9 +25,9 @@ namespace Aplicacao
             return Banco.Remetentes.ToList();
         }
 
-        public IEnumerable<Remetente> Listar(int Identificador)
+        public IEnumerable<Remetente> Listar(int identificador)
         {
-            return Banco.Remetentes.Where(x => x.RemetenteId == Identificador).ToList();
+            return Banco.Remetentes.Where(x => x.RemetenteId == identificador).ToList();
         }
 
         public void Alterar(Remetente remetente)

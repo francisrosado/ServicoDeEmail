@@ -22,5 +22,6 @@ namespace Aplicacao
                 .Include(x => x.Destinario)
                 .Include(x => x.Anexo).ToList();
         }
+
     }
 }

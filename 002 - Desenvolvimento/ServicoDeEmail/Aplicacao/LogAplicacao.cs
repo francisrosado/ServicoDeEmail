@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Repositorio;
 using Dominio;
 
@@ -13,7 +11,7 @@ namespace Aplicacao
 
         public LogAplicacao()
         {
-            Banco = new Contexto();       
+            Banco = new Contexto();
         }
 
         public void Salvar(Log log)
@@ -21,7 +19,5 @@ namespace Aplicacao
             Banco.Logs.Add(log);
             Banco.SaveChanges();
         }
-
-
     }
 }

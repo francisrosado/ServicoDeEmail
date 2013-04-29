@@ -8,6 +8,7 @@ namespace Dominio
         public DateTime Data { get; set; }
         public bool Enviado { get; set; }
         public string MensagemDeEnvio { get; set; }
+        public int MensagemId { get; set; }
         public Mensagem Mensagem { get; set; }
     }
 }
