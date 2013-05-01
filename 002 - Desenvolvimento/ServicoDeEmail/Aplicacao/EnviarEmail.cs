@@ -19,8 +19,6 @@ namespace Aplicacao
                                             string enderecoDoArquivoAnexo,
                                             int idMensagem)
         {
-            var logApp = new LogAplicacao();
-
             try
             {
                 var enderecoEmailValido = ValidarEmail(destinario);
@@ -58,7 +56,6 @@ namespace Aplicacao
                 return false;
             }
         }
-
 
         public bool ValidarEmail(String enderecoEmail)
         {

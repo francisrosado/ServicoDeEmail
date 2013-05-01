@@ -8,13 +8,16 @@ namespace ServicoDeEmail
     {
         static void Main(string[] args)
         {
+            var mensagem = new Mensagem();
             var mensagemApp = new MensagemAplicacao();
             var enviarEmail = new EnviarEmail();
             var anexoApp = new AnexoAplicacao();
             var logApp = new LogAplicacao();
             var log = new Log();
+            
 
             var listaDeMensagens = mensagemApp.Listar();
+            if (listaDeMensagens == null) throw new ArgumentNullException("listaDeMensagens");
             foreach (var mensagens in listaDeMensagens)
             {
                 var listaDestinatarios = "";
@@ -37,6 +40,9 @@ namespace ServicoDeEmail
                                                                         fileLocation,
                                                                         mensagens.MensagemId);
 
+                mensagens.Enviado = "X";
+                mensagemApp.Alterar(mensagens);
+
                 log.Data = DateTime.Now;
                 log.MensagemId = mensagens.MensagemId;
                 log.Enviado = statusDeEnvio;
@@ -44,30 +50,6 @@ namespace ServicoDeEmail
 
                 logApp.Salvar(log);
             }
-
-            #region
-            //string stringConexao = @"driver={Firebird/Interbase(r) driver}; server=localhost; database=F:\Desenvolvimento\DataBases\FireBird\SCAM.FDB;uid=SYSDBA; pwd=masterkey";
-            //string selecionaClientes = @"Select Endereco From email_usuario ";
-
-            //using (OdbcConnection conexao = new OdbcConnection(stringConexao))
-            //{
-            //    conexao.Open();
-
-            //    OdbcCommand comando = new OdbcCommand(selecionaClientes, conexao);
-
-            //    OdbcDataReader resultado = comando.ExecuteReader();
-
-            //    while (resultado.Read())
-            //    {
-            //        string nome = resultado["Endereco"] as string;
-            //        Console.WriteLine(nome);
-            //    }
-
-            //    Console.ReadLine();
-            //}
-            #endregion
-
-
         }
     }
 }

@@ -15,6 +15,20 @@ namespace Aplicacao
             Banco = new Contexto();
         }
 
+        public void Alterar(Mensagem mensagem)
+        {
+            Mensagem mensagemParaSalvar = Banco.Mensagems.Where(x => x.MensagemId == mensagem.MensagemId).First();
+            Banco.SaveChanges();
+        }
+
+        public void Alterar(Remetente remetente)
+        {
+            Remetente remetenteParaSalvar = Banco.Remetentes.Where(x => x.RemetenteId == remetente.RemetenteId).First();
+            remetenteParaSalvar.RemetenteId = remetente.RemetenteId;
+            remetenteParaSalvar.DescricaoEmail = remetente.DescricaoEmail;
+            Banco.SaveChanges();
+        }
+
         public IEnumerable<Mensagem> Listar()
         {
             return Banco.Mensagems
