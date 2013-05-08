@@ -31,11 +31,11 @@ namespace Aplicacao
 
         public IEnumerable<Mensagem> Listar()
         {
-            return Banco.Mensagems
-                .Include(x => x.Remetente)
-                .Include(x => x.Destinario)
-                .Include(x => x.Anexo).ToList();
+            return Banco.Mensagems.Where(c => c.Enviado == null)
+                     .Include(x => x.Remetente)
+                     .Include(x => x.Destinario)
+                     .Include(x => x.Anexo)
+                     .ToList();
         }
-
     }
 }

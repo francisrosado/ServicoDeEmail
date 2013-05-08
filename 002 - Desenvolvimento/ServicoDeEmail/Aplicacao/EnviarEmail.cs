@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -16,7 +17,7 @@ namespace Aplicacao
                                             string destinario,
                                             string assunto,
                                             string corpoDaMensagem,
-                                            string enderecoDoArquivoAnexo,
+                                            byte[] arquivoAnexo,
                                             int idMensagem)
         {
             try
@@ -37,7 +38,9 @@ namespace Aplicacao
                 mensagemEmail.Subject = assunto;
                 mensagemEmail.Body = corpoDaMensagem;
 
-                var anexado = new Attachment(enderecoDoArquivoAnexo, MediaTypeNames.Application.Octet);
+                var ms = new MemoryStream(arquivoAnexo);
+
+                var anexado = new Attachment(ms, MediaTypeNames.Application.Octet);
                 mensagemEmail.Attachments.Add(anexado);
 
                 var clientSmtp = new SmtpClient(smtpRemetente, portaRemetente) { EnableSsl = false };
@@ -49,7 +52,6 @@ namespace Aplicacao
                 clientSmtp.Send(mensagemEmail);
 
                 return true;
-
             }
             catch (Exception)
             {

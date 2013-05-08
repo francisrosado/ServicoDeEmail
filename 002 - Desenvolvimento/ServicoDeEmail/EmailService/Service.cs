@@ -1,14 +1,46 @@
 ﻿using System;
+using System.Threading;
+using System.IO;
+using System.ServiceProcess;
 using System.Collections.Generic;
+using System.Diagnostics;
+
 using Aplicacao;
 using Dominio;
 
-namespace ServicoDeEmail
+namespace EmailService
 {
-    internal class Program
+    public partial class Service : ServiceBase
     {
-        private static void Main(string[] args)
+        private Timer timer1;
+
+        public Service()
         {
+            InitializeComponent();
+        }
+
+        protected override void OnStart(string[] args)
+        {
+            timer1 = new Timer(new TimerCallback(timer1_Tick), null, 15000, 600000);
+        }
+
+        protected override void OnStop()
+        {
+            StreamWriter vWriter = new StreamWriter(@"c:\EmailService.txt", true);
+
+            vWriter.WriteLine("Servico Parado: " + DateTime.Now.ToString());
+            vWriter.Flush();
+            vWriter.Close();
+        }
+
+        private void timer1_Tick(object sender)
+        {
+            StreamWriter vWriter = new StreamWriter(@"c:\EmailService.txt", true);
+
+            vWriter.WriteLine("Servico Rodando: " + DateTime.Now.ToString());
+            vWriter.Flush();
+            vWriter.Close();
+
             var mensagem = new Mensagem();
             var mensagemApp = new MensagemAplicacao();
             var enviarEmail = new EnviarEmail();
@@ -21,8 +53,6 @@ namespace ServicoDeEmail
             foreach (Mensagem mensagens in listaDeMensagens)
             {
                 var listaDestinatarios = "";
-                var fileLocation = anexoApp.SalvarArquivoTempo(mensagens.Anexo.NomeArquivo,
-                                                                  mensagens.Anexo.ArquivoAnexo);
 
                 foreach (Destinario destinatarios in mensagens.Destinario)
                 {
@@ -31,7 +61,7 @@ namespace ServicoDeEmail
                     listaDestinatarios = listaDestinatarios + ", " + destinatarios.DescricaoEmail;
                 }
 
-                var statusDeEnvio = enviarEmail.EnviarMensagemEmail(mensagens.Remetente.DescricaoEmail,
+                Boolean statusDeEnvio = enviarEmail.EnviarMensagemEmail(mensagens.Remetente.DescricaoEmail,
                                                                         mensagens.Remetente.Senha,
                                                                         mensagens.Remetente.Smtp,
                                                                         mensagens.Remetente.Porta,
